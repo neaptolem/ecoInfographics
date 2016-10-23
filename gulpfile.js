@@ -11,7 +11,7 @@ var gulp = require('gulp'),
 gulp.task('browser-sync', ['styles', 'styles:libs', 'scripts', 'jade','addFonts'], function() {
     browserSync.init({
         server: {
-            baseDir: "./app"
+            baseDir: "./docs"
         },
         notify: false
     });
@@ -25,14 +25,14 @@ gulp.task('styles', function() {
         }).on('error', sass.logError))
 				.pipe(concat('main.min.css'))
 				.pipe(minifycss())
-        .pipe(gulp.dest('app/css'))
+        .pipe(gulp.dest('docs/css'))
         .pipe(browserSync.stream());
 });
 
 gulp.task('jade', function() {
     return gulp.src('jade/*.jade')
         .pipe(jade())
-        .pipe(gulp.dest('app'));
+        .pipe(gulp.dest('docs'));
 });
 
 gulp.task('scripts', function() {
@@ -41,7 +41,7 @@ gulp.task('scripts', function() {
             './node_modules/bootstrap/dist/js/bootstrap.min.js',
         ])
         .pipe(concat('libs.js'))
-        .pipe(gulp.dest('./app/js/'));
+        .pipe(gulp.dest('./docs/js/'));
 });
 gulp.task('styles:libs', function() {
     return gulp.src([
@@ -49,20 +49,20 @@ gulp.task('styles:libs', function() {
             './node_modules/font-awesome/css/font-awesome.min.css',
         ])
         .pipe(concat('libs.css'))
-        .pipe(gulp.dest('./app/css/'));
+        .pipe(gulp.dest('./docs/css/'));
 });
 gulp.task('addFonts', function() {
     gulp.src(['./node_modules/font-awesome/fonts/*','./node_modules/bootstrap/fonts/*'])
-    .pipe(gulp.dest('./app/fonts'));
+    .pipe(gulp.dest('./docs/fonts'));
 });
 gulp.task('watch', function() {
     gulp.watch('sass/*.sass', ['styles']);
     gulp.watch('jade/*.jade', ['jade']);
 		gulp.watch('jade/*/*.jade', ['jade']);
     gulp.watch('jade/*/*/*.jade', ['jade']);
-    gulp.watch('app/libs/**/*.js', ['scripts']);
-    gulp.watch('app/js/*.js').on("change", browserSync.reload);
-    gulp.watch('app/*.html').on('change', browserSync.reload);
+    gulp.watch('docs/libs/**/*.js', ['scripts']);
+    gulp.watch('docs/js/*.js').on("change", browserSync.reload);
+    gulp.watch('docs/*.html').on('change', browserSync.reload);
 });
 
 gulp.task('default', ['browser-sync', 'watch']);
